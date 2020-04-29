@@ -1,0 +1,13 @@
+---
+- name: Instalando pacotes do Banco de Dados
+  apt:
+    name: ["mariadb-server"]
+    state: present
+- name: Copiando dump inicial
+  template:
+    src: "{{ item.split('|')[0] }}"
+    dest: "{{ item.split('|')[1] }}"
+  loop:
+  - "database.sql|/tmp"
+  - "50-server.cnf|/etc/mysql/mariadb.conf.d"
+- shell: mysql < /tmp/database.sql

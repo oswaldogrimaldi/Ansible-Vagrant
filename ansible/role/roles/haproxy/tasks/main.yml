@@ -1,0 +1,13 @@
+---
+- name: Instalando HAProxy
+  apt:
+    name: haproxy
+    state: present
+- name: Copiando arquivo de configuração
+  template:
+    src: haproxy.cfg
+    dest: /etc/haproxy/
+- name: Recarregando HaProxy
+  service:
+    name: haproxy
+    state: reloaded

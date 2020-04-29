@@ -1,0 +1,7 @@
+---
+  # defaults file for mysql
+DB_HOST: 172.27.11.40
+DB_PORT: 3306
+DB_USER: aplicacao
+DB_PASS: 4linux
+DB_NAME: aplicacao

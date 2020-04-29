@@ -1,5 +1,9 @@
 # DevOps
 
+- União entre desenvolvedores e operações
+- Uma questão de cultura empresarial, um framework
+- O que eu acho?
+
 # Infraestrutura como Código - IaaC
 
 - A construção e configuração da infraestrutura é conhecida e versionada
@@ -19,3 +23,20 @@
 ### Vantagem?
 
 - Não há necessidade de aplicar gerência de configuração nas máquinas
+- Sem desculpas para não atualizar - nunca houve, mas...
+
+# Ansible
+
+- Descentralizado
+- Curva de aprendizado baixíssima
+- Legibilidade
+- Precisa apenas de interpretador do Python
+- [(R)?ex](https://www.rexify.org/) - "Ansible em Perl"
+- E o Puppet?
+
+# Rundeck
+
+- Conhece as máquinas
+- Flexível, executa qualquer tipo de provisionador - inclusive o bom e velho shell
+- Trata cada **project** como um processo isolado, com suas variáveis, inventário de máquinas e jobs.
+- E o Jenkins?

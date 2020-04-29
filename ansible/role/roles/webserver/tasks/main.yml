@@ -1,0 +1,35 @@
+---
+- name: Instalando pacotes do Webserver
+  apt:
+    name: ["lighttpd", "php-fpm", "php-mysql", "php-memcached", "memcached", "git"]
+    state: present
+- name: Copiando arquivos de configuração
+  template:
+    src: "{{ item.split('|')[0] }}"
+    dest: "{{ item.split('|')[1] }}"
+  loop:
+  - "15-php-fpm.conf|/etc/lighttpd/conf-available/15-php-fpm.conf"
+  - "www.conf|/etc/php/7.3/fpm/pool.d/www.conf"
+  - "memcached.conf|/etc/memcached.conf"
+- name: Carregando módulos do lighttpd
+  command: lighty-enable-mod php-fpm
+  ignore_errors: yes
+- name: Instalando site
+  git:
+    repo: https://github.com/hector-vido/php-ms.git
+    dest: /tmp/html
+    depth: 1
+    force: yes
+- name: Movendo site
+  copy:
+    src: /tmp/html
+    dest: /var/www/
+    remote_src: yes
+- name: Reiniciando serviços
+  service:
+    name: '{{ item }}'
+    state: restarted
+  loop:
+  - memcached
+  - php7.3-fpm
+  - lighttpd
