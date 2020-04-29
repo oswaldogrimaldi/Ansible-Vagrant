@@ -5,6 +5,15 @@ echo 'export http_proxy=http://10.142.0.43:3128' >> /etc/profile
 echo 'export https_proxy=http://10.142.0.43:3128' >> /etc/profile
 . /etc/profile
 
+cat >> /etc/apt/apt.conf.d/80proxy <<EOF
+Acquire {
+        Retries "0";
+        HTTP {
+                Proxy "http://10.142.0.43:3128/";
+        };
+};
+EOF
+
 apt-get install -y wget
 
 wget https://apt.puppetlabs.com/puppet6-release-buster.deb
