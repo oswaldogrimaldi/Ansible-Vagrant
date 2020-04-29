@@ -2,7 +2,13 @@
   become: yes
   vars_files:
     - variaveis.yml
-  roles:
-  - mysql
-  - webserver
-  - haproxy
+  tasks:
+  - import_role:
+      name: mysql
+    when: ansible_hostname == 'database'
+  - import_role:
+      name: webserver
+    when: ansible_hostname.startswith('webserver')
+  - import_role:
+      name: haproxy
+    when: ansible_hostname == 'balancer'
