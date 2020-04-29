@@ -1,0 +1,6 @@
+DB_HOST: 172.27.11.40
+DB_PORT: 172.27.11.40
+DB_USER: aplicacao
+DB_PASS: 4linux
+DB_NAME: aplicacao
+MEMCACHEDS: webserver1.example.com:11211,webserver2.example.com:11211

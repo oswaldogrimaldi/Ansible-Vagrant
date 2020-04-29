@@ -1,15 +1,21 @@
 - hosts: all
   become: yes
+  vars_files:
+    - ~/Vagrant/live/ansible/single-file/variaveis.yml
   tasks:
   - block:
     - name: Instalando pacotes do Webserver
       apt:
-        name: ["lighttpd", "php-fpm", "php-mysql", "git"]
+        name: ["lighttpd", "php-fpm", "php-mysql", "php-memcached", "memcached", "git"]
         state: present
-    - name: Copiando arquivo de configuração do lighttpd
-      copy:
-        src: ~/Vagrant/live/ansible/single-file/confs/15-php-fpm.conf
-        dest: /etc/lighttpd/conf-available/15-php-fpm.conf
+    - name: Copiando arquivo de configuração do memcached
+      template:
+        src: "{{ item.split('|')[0] }}"
+        dest: "{{ item.split('|')[1] }}"
+      loop:
+      - "~/Vagrant/live/ansible/single-file/confs/15-php-fpm.conf|/etc/lighttpd/conf-available/15-php-fpm.conf"
+      - "~/Vagrant/live/ansible/single-file/confs/www.conf|/etc/php/7.3/fpm/pool.d/www.conf"
+      - "~/Vagrant/live/ansible/single-file/confs/memcached.conf|/etc/memcached.conf"
     - name: Carregando módulos do lighttpd
       command: lighty-enable-mod php-fpm
       ignore_errors: yes
@@ -24,16 +30,23 @@
         src: /tmp/html
         dest: /var/www/
         remote_src: yes
-    - name: Reiniciando lighttpd
+    - name: Reiniciando serviços
       service:
         name: '{{ item }}'
         state: restarted
       loop:
-      - lighttpd
+      - memcached
       - php7.3-fpm
+      - lighttpd
     when: ansible_hostname.startswith('webserver')
-  - name: Instalando pacotes do Banco de Dados
-    apt:
-      name: ["mariadb-server"]
-      state: present
+  - block:
+    - name: Instalando pacotes do Banco de Dados
+      apt:
+        name: ["mariadb-server"]
+        state: present
+    - name: Copiando dump inicial
+      template:
+        src: ~/Vagrant/live/ansible/single-file/confs/database.sql
+        dest: /tmp
+    - command: sudo su -c "mysql < /tmp/database.sql"
     when: ansible_hostname == 'database'
