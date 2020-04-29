@@ -1,0 +1,12 @@
+# Lembrar de aceitar as identidades dos hosts via SSH ou utilizar host_key_checking=False
+# Interpretador - https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html
+
+# Estas variáveis podem substituir configurações presentes em /etc/ansible/ansible.cfg ou ~/.ansible.cfg
+[all:vars]
+ansible_user=robot
+host_key_checking=False
+interpreter_python=auto_silent
+
+# Por conta das variáveis, precisamos separar nossos hosts, o que de qualquer forma é uma boa prática
+[hosts]
+172.27.11.[10:40:10]

@@ -1,0 +1,39 @@
+- hosts: all
+  become: yes
+  tasks:
+  - block:
+    - name: Instalando pacotes do Webserver
+      apt:
+        name: ["lighttpd", "php-fpm", "php-mysql", "git"]
+        state: present
+    - name: Copiando arquivo de configuração do lighttpd
+      copy:
+        src: ~/Vagrant/live/ansible/single-file/confs/15-php-fpm.conf
+        dest: /etc/lighttpd/conf-available/15-php-fpm.conf
+    - name: Carregando módulos do lighttpd
+      command: lighty-enable-mod php-fpm
+      ignore_errors: yes
+    - name: Instalando site
+      git:
+        repo: https://github.com/hector-vido/php-ms.git
+        dest: /tmp/html
+        depth: 1
+        force: yes
+    - name: Movendo site
+      copy:
+        src: /tmp/html
+        dest: /var/www/
+        remote_src: yes
+    - name: Reiniciando lighttpd
+      service:
+        name: '{{ item }}'
+        state: restarted
+      loop:
+      - lighttpd
+      - php7.3-fpm
+    when: ansible_hostname.startswith('webserver')
+  - name: Instalando pacotes do Banco de Dados
+    apt:
+      name: ["mariadb-server"]
+      state: present
+    when: ansible_hostname == 'database'
