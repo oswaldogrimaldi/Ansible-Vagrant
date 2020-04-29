@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 vms = {
-  'balancer' => {'memory' => '256', 'cpus' => 1, 'ip' => '10'},
+  'balancer' => {'memory' => '2048', 'cpus' => 1, 'ip' => '10'},
   'webserver1' => {'memory' => '512', 'cpus' => 1, 'ip' => '20'},
   'webserver2' => {'memory' => '512', 'cpus' => 1, 'ip' => '30'},
   'database' => {'memory' => '1024', 'cpus' => 2, 'ip' => '40'}

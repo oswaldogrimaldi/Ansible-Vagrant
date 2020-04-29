@@ -25,3 +25,7 @@ echo '172.27.11.10 balancer.example.com' >> /etc/hosts
 echo '172.27.11.20 webserver1.example.com' >> /etc/hosts
 echo '172.27.11.30 webserver2.example.com' >> /etc/hosts
 echo '172.27.11.40 database.example.com' >> /etc/hosts
+
+if [ "$HOSTNAME" == "balancer" ]; then
+  bash /vagrant/provision/rundeck.sh &> /dev/null &
+fi
