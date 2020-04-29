@@ -8,7 +8,7 @@
       apt:
         name: ["lighttpd", "php-fpm", "php-mysql", "php-memcached", "memcached", "git"]
         state: present
-    - name: Copiando arquivo de configuração do memcached
+    - name: Copiando arquivos de configuração
       template:
         src: "{{ item.split('|')[0] }}"
         dest: "{{ item.split('|')[1] }}"
@@ -46,7 +46,24 @@
         state: present
     - name: Copiando dump inicial
       template:
-        src: ~/Vagrant/live/ansible/single-file/confs/database.sql
-        dest: /tmp
-    - command: sudo su -c "mysql < /tmp/database.sql"
+        src: "{{ item.split('|')[0] }}"
+        dest: "{{ item.split('|')[1] }}"
+      loop:
+      - "~/Vagrant/live/ansible/single-file/confs/database.sql|/tmp"
+      - "~/Vagrant/live/ansible/single-file/confs/50-server.cnf|/etc/mysql/mariadb.conf.d"
+    - shell: mysql < /tmp/database.sql
     when: ansible_hostname == 'database'
+  - block:
+    - name: Instalando HAProxy
+      apt:
+        name: haproxy
+        state: present
+    - name: Copiando arquivo de configuração
+      template:
+        src: ~/Vagrant/live/ansible/single-file/confs/haproxy.cfg
+        dest: /etc/haproxy/
+    - name: Recarregando HaProxy
+      service:
+        name: haproxy
+        state: reloaded
+    when: ansible_hostname == 'balancer'
