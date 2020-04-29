@@ -1,9 +1,21 @@
 #!/bin/bash
 
 mkdir -p /root/.ssh
-cp /vagrant/files/id_rsa* /root/.ssh
+cp /vagrant/files/root-key /root/.ssh/id_rsa
+cp /vagrant/files/root-key.pub /root/.ssh/id_rsa.pub
 chmod 400 /root/.ssh/id_rsa*
-cp /vagrant/files/id_rsa.pub /root/.ssh/authorized_keys
+cp /vagrant/files/root-key.pub /root/.ssh/authorized_keys
+
+getent passwd robot > /dev/null
+if [ "$?" -ne 0 ]; then
+  useradd -d /home/robot -m -s /bin/bash robot
+  mkdir -p /home/robot/.ssh
+  cp /vagrant/files/robot-key /home/robot/.ssh/id_rsa
+	cp /vagrant/files/robot-key.pub /home/robot/.ssh/id_rsa.pub
+  chmod 400 /home/robot/.ssh/id_rsa*
+  cp /vagrant/files/robot-key.pub /home/robot/.ssh/authorized_keys
+  chown -R robot: /home/robot/.ssh
+fi
 
 HOSTS=$(head -n7 /etc/hosts)
 echo -e "$HOSTS" > /etc/hosts

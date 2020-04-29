@@ -12,7 +12,10 @@
 - Também conhecidos como "phoenix servers"
 - Modificações são realizadas nas imagens base, testadas e então replicadas
 - A destruição e reconstrução dos servidores os colocam em um estado conhecido
-- Não há necessidade de aplicar gerência de configuração nas máquinas
 - Assim como os contêineres, os dados que precisam persistir devem ficar fora da máquina (storage, nfs)
 - Configurações específicas (metadados) podem ser obtidos da cloud ou por exemplo Zookeper/Consul.
 - O processo é o mesmo de se desenvolver um software
+
+### Vantagem?
+
+- Não há necessidade de aplicar gerência de configuração nas máquinas
