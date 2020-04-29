@@ -1,3 +1,7 @@
+# Basico
+apt-get update
+apt-get install -y apt-transport-https ca-certificates wget dirmngr gnupg software-properties-common
+
 # Ansible
 echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
@@ -5,12 +9,10 @@ apt-get update
 apt-get install -y ansible
 
 # Java 8
-apt-get update
-apt-get install -y apt-transport-https ca-certificates wget dirmngr gnupg software-properties-common uuid-runtime
 wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
 add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
 apt-get update
-apt-get install -y adoptopenjdk-8-hotspot
+apt-get install -y adoptopenjdk-8-hotspot uuid-runtime
 
 # Rundeck
 if [ ! -f rundeck_3.2.6.20200427-1_all.deb ]; then
